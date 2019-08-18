@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -57,11 +58,23 @@ public class SalesAppTest {
         doReturn(fromDay.getTime()).when(sales).getEffectiveFrom();
         Calendar toDay = Calendar.getInstance();
         toDay.set(Calendar.DATE, toDay.get(Calendar.DATE) + 100);
-        doReturn(toDay).when(sales).getEffectiveTo();
+        doReturn(toDay.getTime()).when(sales).getEffectiveTo();
 
         boolean res = salesApp.isValidDate(sales);
 
         // then
         assertTrue(res);
+    }
+
+    @Test
+    public void should_return_sales_id_sales_name_activity_time_when_generate_headers_given_is_nat_trade() {
+        // given
+        SalesApp salesApp = new SalesApp();
+
+        // when
+        List<String> res = salesApp.generateHeaders(true);
+
+        // then
+        assertEquals(Arrays.asList("Sales ID", "Sales Name", "Activity", "Time"), res);
     }
 }
