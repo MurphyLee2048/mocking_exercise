@@ -8,10 +8,10 @@ import java.util.List;
 public class SalesApp {
 
 	public void generateSalesActivityReport(String salesId, int maxRow, boolean isNatTrade, boolean isSupervisor) {
-		
-		SalesDao salesDao = new SalesDao();
-		SalesReportDao salesReportDao = new SalesReportDao();
-		List<String> headers = null;
+
+        SalesDao salesDao = getSalesDao();
+        SalesReportDao salesReportDao = getSalesReportDao();
+        List<String> headers = null;
 		
 		List<SalesReportData> filteredReportDataList = new ArrayList<SalesReportData>();
 		
@@ -51,9 +51,16 @@ public class SalesApp {
 
     }
 
+    protected SalesReportDao getSalesReportDao() {
+        return new SalesReportDao();
+    }
+
+    protected SalesDao getSalesDao() {
+        return new SalesDao();
+    }
+
     protected void ecmServiceUploadDocument(SalesActivityReport report) {
-        EcmService ecmService = getEcmService();
-        ecmService.uploadDocument(report.toXml());
+        getEcmService().uploadDocument(report.toXml());
     }
 
     private EcmService getEcmService() {
