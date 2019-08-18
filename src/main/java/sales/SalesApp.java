@@ -60,7 +60,7 @@ public class SalesApp {
 		
 	}
 
-	private SalesActivityReport generateReport(List<String> headers, List<SalesReportData> reportDataList) {
+	protected SalesActivityReport generateReport(List<String> headers, List<SalesReportData> reportDataList) {
 		// TODO Auto-generated method stub
 		return null;
 	}
