@@ -11,7 +11,7 @@ import static org.mockito.Mockito.*;
 public class SalesAppTest {
 
 	@Test
-	public void testGenerateReport() {
+	public void testGenerateSalesActivityReport() {
 		// given
 		EcmService spyEcmService = spy(new EcmService());
 		Sales spySales = spy(new Sales());

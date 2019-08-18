@@ -8,9 +8,7 @@ import java.util.List;
 public class SalesApp {
 
     public void generateSalesActivityReport(String salesId, int maxRow, boolean isNatTrade, boolean isSupervisor) {
-        List<String> headers = null;
-
-        List<SalesReportData> filteredReportDataList = new ArrayList<SalesReportData>();
+        List<String> headers = generateHeaders(isNatTrade);
 
         if (salesId == null) {
             return;
@@ -22,6 +20,42 @@ public class SalesApp {
 
         List<SalesReportData> reportDataList = getSalesReportDao().getReportData(sales);
 
+//        for (SalesReportData data : reportDataList) {
+//            if ("SalesActivity".equalsIgnoreCase(data.getType())) {
+//                if (data.isConfidential()) {
+//                    if (isSupervisor) {
+//                        filteredReportDataList.add(data);
+//                    }
+//                } else {
+//                    filteredReportDataList.add(data);
+//                }
+//            }
+//        }
+
+        List<SalesReportData> filteredReportDataList = getFilteredReportDataList(reportDataList, isSupervisor);
+        filteredReportDataList = getTempList(maxRow, reportDataList);
+//        List<SalesReportData> tempList = new ArrayList<SalesReportData>();
+//        for (int i = 0; i < reportDataList.size() || i < maxRow; i++) {
+//            tempList.add(reportDataList.get(i));
+//        }
+//        filteredReportDataList = tempList;
+
+        SalesActivityReport report = this.generateReport(headers, reportDataList);
+
+        ecmServiceUploadDocument(report);
+
+    }
+
+    protected List<SalesReportData> getTempList(int maxRow, List<SalesReportData> reportDataList) {
+        List<SalesReportData> tempList = new ArrayList<SalesReportData>();
+        for (int i = 0; i < reportDataList.size() || i < maxRow; i++) {
+            tempList.add(reportDataList.get(i));
+        }
+        return tempList;
+    }
+
+    protected List<SalesReportData> getFilteredReportDataList(List<SalesReportData> reportDataList, boolean isSupervisor) {
+        List<SalesReportData> filteredReportDataList = new ArrayList<SalesReportData>();
         for (SalesReportData data : reportDataList) {
             if ("SalesActivity".equalsIgnoreCase(data.getType())) {
                 if (data.isConfidential()) {
@@ -33,19 +67,7 @@ public class SalesApp {
                 }
             }
         }
-
-        List<SalesReportData> tempList = new ArrayList<SalesReportData>();
-        for (int i = 0; i < reportDataList.size() || i < maxRow; i++) {
-            tempList.add(reportDataList.get(i));
-        }
-        filteredReportDataList = tempList;
-
-        headers = generateHeaders(isNatTrade);
-
-        SalesActivityReport report = this.generateReport(headers, reportDataList);
-
-        ecmServiceUploadDocument(report);
-
+        return filteredReportDataList;
     }
 
     protected SalesReportDao getSalesReportDao() {
