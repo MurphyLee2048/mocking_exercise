@@ -26,7 +26,7 @@ public class SalesApp {
 				|| today.before(sales.getEffectiveFrom())){
 			return;
 		}
-		
+
 		List<SalesReportData> reportDataList = salesReportDao.getReportData(sales);
 		
 		for (SalesReportData data : reportDataList) {

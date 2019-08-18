@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.collections.CollectionUtils;
-
 public class InOrderParkingStrategy implements ParkingStrategy {
 
 	public Receipt park(List<ParkingLot> parkingLots, Car car) {
