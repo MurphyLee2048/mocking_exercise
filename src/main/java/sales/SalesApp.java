@@ -9,22 +9,11 @@ public class SalesApp {
 
     public void generateSalesActivityReport(String salesId, int maxRow, boolean isNatTrade, boolean isSupervisor) {
         List<String> headers = generateHeaders(isNatTrade);
-
-        if (salesId == null) {
-            return;
-        }
-
+        if (salesId == null) return;
         Sales sales = getSalesDao().getSalesBySalesId(salesId);
-
         if (isValidDate(sales)) return;
-
         List<SalesReportData> reportDataList = getSalesReportDao().getReportData(sales);
-
-        List<SalesReportData> filteredReportDataList = getFilteredReportDataList(reportDataList, isSupervisor);
-        filteredReportDataList = getTempList(maxRow, reportDataList);
-
         SalesActivityReport report = this.generateReport(headers, reportDataList);
-
         ecmServiceUploadDocument(report);
 
     }
