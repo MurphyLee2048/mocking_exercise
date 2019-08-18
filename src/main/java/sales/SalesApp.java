@@ -46,11 +46,19 @@ public class SalesApp {
         headers = generateHeaders(isNatTrade);
 
         SalesActivityReport report = this.generateReport(headers, reportDataList);
-		
-		EcmService ecmService  = new EcmService();
-		ecmService.uploadDocument(report.toXml());
-		
-	}
+
+        ecmServiceUploadDocument(report);
+
+    }
+
+    protected void ecmServiceUploadDocument(SalesActivityReport report) {
+        EcmService ecmService = getEcmService();
+        ecmService.uploadDocument(report.toXml());
+    }
+
+    private EcmService getEcmService() {
+        return new EcmService();
+    }
 
     protected List<String> generateHeaders(boolean isNatTrade) {
         List<String> headers;
