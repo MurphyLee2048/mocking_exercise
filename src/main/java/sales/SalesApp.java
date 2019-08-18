@@ -7,41 +7,38 @@ import java.util.List;
 
 public class SalesApp {
 
-	public void generateSalesActivityReport(String salesId, int maxRow, boolean isNatTrade, boolean isSupervisor) {
-
-        SalesDao salesDao = getSalesDao();
-        SalesReportDao salesReportDao = getSalesReportDao();
+    public void generateSalesActivityReport(String salesId, int maxRow, boolean isNatTrade, boolean isSupervisor) {
         List<String> headers = null;
-		
-		List<SalesReportData> filteredReportDataList = new ArrayList<SalesReportData>();
-		
-		if (salesId == null) {
-			return;
-		}
-		
-		Sales sales = salesDao.getSalesBySalesId(salesId);
 
-		if (isValidDate(sales)) return;
+        List<SalesReportData> filteredReportDataList = new ArrayList<SalesReportData>();
 
-		List<SalesReportData> reportDataList = salesReportDao.getReportData(sales);
-		
-		for (SalesReportData data : reportDataList) {
-			if ("SalesActivity".equalsIgnoreCase(data.getType())) {
-				if (data.isConfidential()) {
-					if (isSupervisor) {
-						filteredReportDataList.add(data);
-					}
-				}else {
-					filteredReportDataList.add(data);
-				}
-			}
-		}
-		
-		List<SalesReportData> tempList = new ArrayList<SalesReportData>();
-		for (int i=0; i < reportDataList.size() || i < maxRow; i++) {
-			tempList.add(reportDataList.get(i));
-		}
-		filteredReportDataList = tempList;
+        if (salesId == null) {
+            return;
+        }
+
+        Sales sales = getSalesDao().getSalesBySalesId(salesId);
+
+        if (isValidDate(sales)) return;
+
+        List<SalesReportData> reportDataList = getSalesReportDao().getReportData(sales);
+
+        for (SalesReportData data : reportDataList) {
+            if ("SalesActivity".equalsIgnoreCase(data.getType())) {
+                if (data.isConfidential()) {
+                    if (isSupervisor) {
+                        filteredReportDataList.add(data);
+                    }
+                } else {
+                    filteredReportDataList.add(data);
+                }
+            }
+        }
+
+        List<SalesReportData> tempList = new ArrayList<SalesReportData>();
+        for (int i = 0; i < reportDataList.size() || i < maxRow; i++) {
+            tempList.add(reportDataList.get(i));
+        }
+        filteredReportDataList = tempList;
 
         headers = generateHeaders(isNatTrade);
 
@@ -78,17 +75,17 @@ public class SalesApp {
     }
 
     protected boolean isValidDate(Sales sales) {
-		Date today = new Date();
-		if (today.after(sales.getEffectiveTo())
-				|| today.before(sales.getEffectiveFrom())){
-			return true;
-		}
-		return false;
-	}
+        Date today = new Date();
+        if (today.after(sales.getEffectiveTo())
+                || today.before(sales.getEffectiveFrom())) {
+            return true;
+        }
+        return false;
+    }
 
-	protected SalesActivityReport generateReport(List<String> headers, List<SalesReportData> reportDataList) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    protected SalesActivityReport generateReport(List<String> headers, List<SalesReportData> reportDataList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
