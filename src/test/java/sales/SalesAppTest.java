@@ -81,15 +81,17 @@ public class SalesAppTest {
     @Test
     public void testEcmServiceUploadDocument() {
         // given
-        SalesActivityReport salesActivityReport = new SalesActivityReport();
-        EcmService ecmService = new EcmService();
-        SalesApp salesApp = new SalesApp();
+        SalesActivityReport salesActivityReport = spy(new SalesActivityReport());
+        EcmService ecmService = spy(new EcmService());
+        SalesApp salesApp = spy(new SalesApp());
 
         // when
+        doReturn("").when(salesActivityReport).toXml();
+        doReturn(ecmService).when(salesApp).getEcmService();
         salesApp.ecmServiceUploadDocument(salesActivityReport);
 
         // then
-        verify(ecmService).uploadDocument(anyString());
+        verify(ecmService).uploadDocument("");
 
     }
 }
