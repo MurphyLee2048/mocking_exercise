@@ -20,25 +20,8 @@ public class SalesApp {
 
         List<SalesReportData> reportDataList = getSalesReportDao().getReportData(sales);
 
-//        for (SalesReportData data : reportDataList) {
-//            if ("SalesActivity".equalsIgnoreCase(data.getType())) {
-//                if (data.isConfidential()) {
-//                    if (isSupervisor) {
-//                        filteredReportDataList.add(data);
-//                    }
-//                } else {
-//                    filteredReportDataList.add(data);
-//                }
-//            }
-//        }
-
         List<SalesReportData> filteredReportDataList = getFilteredReportDataList(reportDataList, isSupervisor);
         filteredReportDataList = getTempList(maxRow, reportDataList);
-//        List<SalesReportData> tempList = new ArrayList<SalesReportData>();
-//        for (int i = 0; i < reportDataList.size() || i < maxRow; i++) {
-//            tempList.add(reportDataList.get(i));
-//        }
-//        filteredReportDataList = tempList;
 
         SalesActivityReport report = this.generateReport(headers, reportDataList);
 
