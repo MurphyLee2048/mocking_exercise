@@ -25,23 +25,17 @@ public class SalesAppTest {
 		// when
 		doReturn(spySales).when(spySalesDao).getSalesBySalesId(anyString());
 		doReturn(salesReportDataList).when(spySalesReportDao).getReportData(any(Sales.class));
-		doReturn("SalesActivity").when(spySalesReportData).getType();
-		doReturn(true).when(spySalesReportData).isConfidential();
+		doReturn(spySalesDao).when(spySalesApp).getSalesDao();
+        doReturn(spySalesReportDao).when(spySalesApp).getSalesReportDao();
+		doReturn(true).when(spySalesApp).isValidDate(any(Sales.class));
 		doReturn(spySalesActivityReport).when(spySalesApp).generateReport(anyListOf(String.class), anyListOf(SalesReportData.class));
-		doReturn("").when(spySalesActivityReport).toXml();
-
-		Calendar yesterday = Calendar.getInstance();
-		yesterday.set(Calendar.DATE, yesterday.get(Calendar.DATE) - 1);
-		when(spySales.getEffectiveFrom()).thenReturn(yesterday.getTime());
-
-		Calendar tomorrow = Calendar.getInstance();
-		tomorrow.set(Calendar.DATE, tomorrow.get(Calendar.DATE) + 1);
-		when(spySales.getEffectiveTo()).thenReturn(tomorrow.getTime());
+		doReturn(spyEcmService).when(spySalesApp).getEcmService();
+		doReturn(Arrays.asList("Sales ID", "Sales Name", "Activity", "Local Time")).when(spySalesApp).generateHeaders(anyBoolean());
 
 		spySalesApp.generateSalesActivityReport("DUMMY", 1000, false, false);
 
 		// then
-        verify(spyEcmService).uploadDocument(anyString());
+        verify(spySalesApp).ecmServiceUploadDocument(spySalesActivityReport);
 
 
 

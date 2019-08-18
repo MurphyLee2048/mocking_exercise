@@ -11,11 +11,10 @@ public class SalesApp {
         List<String> headers = generateHeaders(isNatTrade);
         if (salesId == null) return;
         Sales sales = getSalesDao().getSalesBySalesId(salesId);
-        if (isValidDate(sales)) return;
+        if (!isValidDate(sales)) return;
         List<SalesReportData> reportDataList = getSalesReportDao().getReportData(sales);
         SalesActivityReport report = this.generateReport(headers, reportDataList);
         ecmServiceUploadDocument(report);
-
     }
 
     protected List<SalesReportData> getTempList(int maxRow, List<SalesReportData> reportDataList) {
@@ -54,7 +53,7 @@ public class SalesApp {
         getEcmService().uploadDocument(report.toXml());
     }
 
-    private EcmService getEcmService() {
+    protected EcmService getEcmService() {
         return new EcmService();
     }
 
@@ -70,11 +69,8 @@ public class SalesApp {
 
     protected boolean isValidDate(Sales sales) {
         Date today = new Date();
-        if (today.after(sales.getEffectiveTo())
-                || today.before(sales.getEffectiveFrom())) {
-            return true;
-        }
-        return false;
+        return !today.after(sales.getEffectiveTo())
+                && !today.before(sales.getEffectiveFrom());
     }
 
     protected SalesActivityReport generateReport(List<String> headers, List<SalesReportData> reportDataList) {
