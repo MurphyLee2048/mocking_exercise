@@ -42,21 +42,27 @@ public class SalesApp {
 			tempList.add(reportDataList.get(i));
 		}
 		filteredReportDataList = tempList;
-		
-		if (isNatTrade) {
-			headers = Arrays.asList("Sales ID", "Sales Name", "Activity", "Time");
-		} else {
-			headers = Arrays.asList("Sales ID", "Sales Name", "Activity", "Local Time");
-		}
-		
-		SalesActivityReport report = this.generateReport(headers, reportDataList);
+
+        headers = generateHeaders(isNatTrade);
+
+        SalesActivityReport report = this.generateReport(headers, reportDataList);
 		
 		EcmService ecmService  = new EcmService();
 		ecmService.uploadDocument(report.toXml());
 		
 	}
 
-	protected boolean isValidDate(Sales sales) {
+    protected List<String> generateHeaders(boolean isNatTrade) {
+        List<String> headers;
+        if (isNatTrade) {
+            headers = Arrays.asList("Sales ID", "Sales Name", "Activity", "Time");
+        } else {
+            headers = Arrays.asList("Sales ID", "Sales Name", "Activity", "Local Time");
+        }
+        return headers;
+    }
+
+    protected boolean isValidDate(Sales sales) {
 		Date today = new Date();
 		if (today.after(sales.getEffectiveTo())
 				|| today.before(sales.getEffectiveFrom())){
