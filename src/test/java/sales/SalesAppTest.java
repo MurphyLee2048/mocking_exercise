@@ -77,4 +77,19 @@ public class SalesAppTest {
         // then
         assertEquals(Arrays.asList("Sales ID", "Sales Name", "Activity", "Time"), res);
     }
+
+    @Test
+    public void testEcmServiceUploadDocument() {
+        // given
+        SalesActivityReport salesActivityReport = new SalesActivityReport();
+        EcmService ecmService = new EcmService();
+        SalesApp salesApp = new SalesApp();
+
+        // when
+        salesApp.ecmServiceUploadDocument(salesActivityReport);
+
+        // then
+        verify(ecmService).uploadDocument(anyString());
+
+    }
 }
