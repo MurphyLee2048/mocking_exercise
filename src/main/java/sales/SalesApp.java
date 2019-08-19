@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SalesApp {
 
-    public void generateSalesActivityReport(String salesId, int maxRow, boolean isNatTrade, boolean isSupervisor) {
+    public void generateSalesActivityReport(String salesId, boolean isNatTrade) {
         List<String> headers = generateHeaders(isNatTrade);
         if (salesId == null) return;
         Sales sales = getSalesDao().getSalesBySalesId(salesId);
